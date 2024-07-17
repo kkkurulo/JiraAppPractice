@@ -11,10 +11,8 @@ public class JiraContext : DbContext
     public DbSet<Tasks> Tasks { get; set; }
     public DbSet<User> Users { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    public JiraContext(DbContextOptions<JiraContext> options) : base(options)
     {
-        optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=JiraAppDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
-        base.OnConfiguring(optionsBuilder);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
