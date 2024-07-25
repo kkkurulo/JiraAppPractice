@@ -32,6 +32,20 @@ public class JiraContext : DbContext
             .Property(t => t.CreatedAt)
             .HasDefaultValueSql("GETDATE()");
 
+        modelBuilder.Entity<Tasks>()
+           .HasOne(t => t.Statuses)
+           .WithMany(s => s.Tasks)
+           .HasForeignKey(t => t.StatusId);
+        modelBuilder.Entity<Tasks>()
+            .HasOne(t => t.User)
+            .WithMany(u => u.Tasks)
+            .HasForeignKey(t => t.AsigneeId);
+        modelBuilder.Entity<Tasks>()
+            .HasOne(t => t.Board)
+            .WithMany(b => b.Tasks)
+            .HasForeignKey(t => t.BoardId);
+     
+
         base.OnModelCreating(modelBuilder);
     }
 }
