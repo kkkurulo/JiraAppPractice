@@ -6,8 +6,12 @@ namespace JiraAppPractice.Services.Interfaces;
 public interface IJiraItemService
 {
     Task<List<Tasks>> GetAsync();
+    Task <List<Tasks>>GetAsync(int id);
     Task CreateAsync(CreateJiraItemDto item);
-    Task UpdateAsync(int id, int status);
+    Task UpdateStatusAsync(int TaskId, UpdateStatusDto dto);
+    Task UpdateInfoAsync(int TaskId, UpdateInfoTaskDto dto);
+    Task UpdateAsigneeAsync(int TaskId, UpdateAsigneeDto dto);
+    Task DeleteAsync(int TaskId);
 
-    Task DeleteAsync(int id);
+
 }

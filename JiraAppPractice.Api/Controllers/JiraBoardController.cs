@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JiraAppPractice.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/board-controller")]
     [ApiController]
     public class JiraBoardController : ControllerBase
     {

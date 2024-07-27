@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.Mvc;
  To Do:
     Upgrade getting specific users tasks
  */
- namespace JiraAppPractice.Api.Controllers
+namespace JiraAppPractice.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/item-controller")]
     [ApiController]
     public class JiraItemController : ControllerBase
     {
@@ -21,9 +21,26 @@ using Microsoft.AspNetCore.Mvc;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Tasks>>> GetAsync() {
+        public async Task<ActionResult<IEnumerable<Tasks>>> GetAsync()
+        {
             var items = await _jiraItem.GetAsync();
             return Ok(items);
+        }
+        [HttpGet("{BoardId}")]
+        public async Task<ActionResult<IEnumerable<GettingTaskDto>>> GetAsync(int BoardId)
+        {
+            var items = await _jiraItem.GetAsync(BoardId);
+            var finishItems = items.Select(x => new GettingTaskDto
+            {
+                Id = x.Id,
+                Title = x.Title,
+                Description = x.Description,
+                CreatedAt = x.CreatedAt,
+                BoardId = x.BoardId,
+                AsigneeId = x.AsigneeId,
+                StatusId = x.StatusId
+            });
+            return Ok(finishItems);
         }
 
         [HttpPost]
@@ -32,18 +49,30 @@ using Microsoft.AspNetCore.Mvc;
             await _jiraItem.CreateAsync(item);
             return Ok();
         }
-        [HttpPut("{id}/status/{status}")]
-        public async Task<ActionResult> UpdateStatusAsync(int id, int status)
+        [HttpPut("{TaskId}/status")]
+        public async Task<ActionResult> UpdateAsync(int TaskId, UpdateStatusDto dto)
         {
-            await _jiraItem.UpdateAsync(id, status);
+            await _jiraItem.UpdateStatusAsync(TaskId, dto);
             return Ok();
         }
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteTaskAsync(int id)
+        [HttpPut("{TaskId}/name-description")]
+        public async Task<ActionResult> UpdateAsync(int TaskId, UpdateInfoTaskDto updateInfo)
         {
-            await _jiraItem.DeleteAsync(id);
+            await _jiraItem.UpdateInfoAsync(TaskId, updateInfo);
             return Ok();
         }
-
+        [HttpPut("{TaskId}/asignee")]
+        public async Task<ActionResult> UpdateAsync(int TaskId, UpdateAsigneeDto updateInfo)
+        {
+            await _jiraItem.UpdateAsigneeAsync(TaskId, updateInfo);
+            return Ok();
+        }
+        [HttpDelete("{TaskId}")]
+        public async Task<ActionResult> DeleteTaskAsync(int TaskId)
+        {
+            await _jiraItem.DeleteAsync(TaskId);
+            return Ok();
+        }
+ 
     }
 }

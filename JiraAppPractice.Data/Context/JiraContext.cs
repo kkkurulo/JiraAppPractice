@@ -22,16 +22,25 @@ public class JiraContext : DbContext
         modelBuilder.Entity<Boards>()
             .Property(t => t.CreatedAt)
             .HasDefaultValueSql("GETDATE()");
+        modelBuilder.Entity<Boards>()
+            .Property(t => t.Name)
+            .HasMaxLength(50);
 
         modelBuilder.Entity<Statuses>()
             .HasKey(t => t.Id);
+        modelBuilder.Entity<Statuses>()
+            .Property(t => t.Name)
+            .HasMaxLength(25);
+
         modelBuilder.Entity<User>()
             .HasKey(t => t.Id);
+        modelBuilder.Entity<User>()
+            .Property(x => x.Name)
+            .HasMaxLength(50);
 
         modelBuilder.Entity<Tasks>()
             .Property(t => t.CreatedAt)
             .HasDefaultValueSql("GETDATE()");
-
         modelBuilder.Entity<Tasks>()
            .HasOne(t => t.Statuses)
            .WithMany(s => s.Tasks)
@@ -44,6 +53,13 @@ public class JiraContext : DbContext
             .HasOne(t => t.Board)
             .WithMany(b => b.Tasks)
             .HasForeignKey(t => t.BoardId);
+        modelBuilder.Entity<Tasks>()
+            .Property(t => t.Title)
+            .HasMaxLength(50);
+        modelBuilder.Entity<Tasks>()
+            .Property(t => t.Description)
+            .HasMaxLength(200);
+        
      
 
         base.OnModelCreating(modelBuilder);
