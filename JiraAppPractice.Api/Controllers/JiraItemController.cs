@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
  */
 namespace JiraAppPractice.Api.Controllers
 {
-    [Route("api/item-controller")]
+    [Route("api/item")]
     [ApiController]
     public class JiraItemController : ControllerBase
     {
@@ -26,10 +26,10 @@ namespace JiraAppPractice.Api.Controllers
             var items = await _jiraItem.GetAsync();
             return Ok(items);
         }
-        [HttpGet("{BoardId}")]
-        public async Task<ActionResult<IEnumerable<GettingTaskDto>>> GetAsync(int BoardId)
+        [HttpGet("{boardId}")]
+        public async Task<ActionResult<IEnumerable<GettingTaskDto>>> GetAsync(int boardId)
         {
-            var items = await _jiraItem.GetAsync(BoardId);
+            var items = await _jiraItem.GetAsync(boardId);
             var finishItems = items.Select(x => new GettingTaskDto
             {
                 Id = x.Id,
@@ -49,28 +49,28 @@ namespace JiraAppPractice.Api.Controllers
             await _jiraItem.CreateAsync(item);
             return Ok();
         }
-        [HttpPut("{TaskId}/status")]
-        public async Task<ActionResult> UpdateAsync(int TaskId, UpdateStatusDto dto)
+        [HttpPut("status")]
+        public async Task<ActionResult> UpdateAsync(UpdateStatusDto dto)
         {
-            await _jiraItem.UpdateStatusAsync(TaskId, dto);
+            await _jiraItem.UpdateStatusAsync(dto);
             return Ok();
         }
-        [HttpPut("{TaskId}/name-description")]
-        public async Task<ActionResult> UpdateAsync(int TaskId, UpdateInfoTaskDto updateInfo)
+        [HttpPut("title-description")]
+        public async Task<ActionResult> UpdateAsync(UpdateInfoTaskDto updateInfo)
         {
-            await _jiraItem.UpdateInfoAsync(TaskId, updateInfo);
+            await _jiraItem.UpdateInfoAsync(updateInfo);
             return Ok();
         }
-        [HttpPut("{TaskId}/asignee")]
-        public async Task<ActionResult> UpdateAsync(int TaskId, UpdateAsigneeDto updateInfo)
+        [HttpPut("asignee")]
+        public async Task<ActionResult> UpdateAsync(UpdateAsigneeDto updateInfo)
         {
-            await _jiraItem.UpdateAsigneeAsync(TaskId, updateInfo);
+            await _jiraItem.UpdateAsigneeAsync(updateInfo);
             return Ok();
         }
-        [HttpDelete("{TaskId}")]
-        public async Task<ActionResult> DeleteTaskAsync(int TaskId)
+        [HttpDelete("{taskId}")]
+        public async Task<ActionResult> DeleteTaskAsync(int taskId)
         {
-            await _jiraItem.DeleteAsync(TaskId);
+            await _jiraItem.DeleteAsync(taskId);
             return Ok();
         }
  

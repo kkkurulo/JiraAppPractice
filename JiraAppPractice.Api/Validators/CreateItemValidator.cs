@@ -10,6 +10,6 @@ public class CreateItemValidator : AbstractValidator<CreateJiraItemDto>
         RuleFor(x => x.Title)
             .MaximumLength(50);
         RuleFor(x => x.Description)
-            .MinimumLength(200);
+            .MaximumLength(200);
     }
 }

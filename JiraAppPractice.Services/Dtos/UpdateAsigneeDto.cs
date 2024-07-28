@@ -2,5 +2,6 @@
 
 public class UpdateAsigneeDto
 {
+    public int TaskId { get; set; }
     public int AsigneeId { get; set; }
 }
