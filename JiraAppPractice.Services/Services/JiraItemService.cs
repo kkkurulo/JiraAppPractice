@@ -37,6 +37,10 @@ public class JiraItemService : IJiraItemService
 
     public async Task CreateAsync(CreateJiraItemDto item)
     {
+        if(await _context.Boards.FindAsync(item.BoardId) is null)
+        {
+            throw new BoardNotFound();
+        }
         var itemTask = new Tasks
         {
             Title = item.Title,
