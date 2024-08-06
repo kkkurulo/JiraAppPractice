@@ -47,7 +47,7 @@ public class JiraItemService : IJiraItemService
             Description = item.Description,
             AsigneeId = _user.UserId,
             BoardId = item.BoardId,
-            StatusId = (int)Statuses.ToDo
+            StatusId = (int)Status.ToDo
            
         };
         _context.Tasks.Add(itemTask);
@@ -60,11 +60,11 @@ public class JiraItemService : IJiraItemService
         if (item is null) { throw new ItemNotFound(); }
         if(item.AsigneeId != _user.UserId) { throw new NotExactUser(); }
 
-        if (item.StatusId == (int)Statuses.ToDo && dto.StatusId == (int)Statuses.Done)
+        if (item.StatusId == (int)Status.ToDo && dto.StatusId == (int)Status.Done)
         {
             throw new InvalidStatus();
         }
-        else if (item.StatusId == (int)Statuses.Done)
+        else if (item.StatusId == (int)Status.Done)
         {
             throw new InvalidStatus();
         }

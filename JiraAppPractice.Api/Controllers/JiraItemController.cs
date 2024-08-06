@@ -2,6 +2,7 @@
 using JiraAppPractice.Data.Models;
 using JiraAppPractice.Services.Dtos;
 using JiraAppPractice.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 /**
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
  */
 namespace JiraAppPractice.Api.Controllers
 {
+    [Authorize]
     [Route("api/item")]
     [ApiController]
     public class JiraItemController : ControllerBase

@@ -1,11 +1,13 @@
 ﻿using JiraAppPractice.Data.Models;
 using JiraAppPractice.Services.Dtos;
 using JiraAppPractice.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JiraAppPractice.Api.Controllers
 {
+    [Authorize]
     [Route("api/board")]
     [ApiController]
     public class JiraBoardController : ControllerBase

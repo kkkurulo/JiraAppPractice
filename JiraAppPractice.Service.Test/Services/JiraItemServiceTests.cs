@@ -11,8 +11,35 @@ namespace JiraAppPractice.Service.Test;
 
 public class JiraItemServiceTests
 {
-    private const int UserId = 1;
+    private const string UserId = "1";
+    [Fact]
+    public async Task GetAsync_WithNotFoundBoard_ThrowsBoardNotFound()
+    {
+        var userService = new Mock<ICurrentUserService>();
+        userService.Setup(x=>x.UserId).Returns(UserId);
+        
+        var dbContext = GetDbContext();
+        var service = new JiraItemService(dbContext, userService.Object);
 
+        int board = 1;
+        Func<Task> act = async () => await service.GetAsync(board);
+
+        await Assert.ThrowsAsync<BoardNotFound>(act);
+    } 
+    [Fact]
+    public async Task CreateAsync_WithNotFoundBoard_ThrowsBoardNotFound()
+    {
+        var userService = new Mock<ICurrentUserService>();
+        userService.Setup(x=>x.UserId).Returns(UserId);
+        
+        var dbContext = GetDbContext();
+        var service = new JiraItemService(dbContext, userService.Object);
+
+        var param = new CreateJiraItemDto {};
+        Func<Task> act = async () => await service.CreateAsync(param);
+
+        await Assert.ThrowsAsync<BoardNotFound>(act);
+    }
     [Fact]
     public async Task UpdateStatusAsync_WithNotFoundItem_ThrowsItemNotFound()
     {
@@ -38,7 +65,7 @@ public class JiraItemServiceTests
         {
             Title = "test",
             Description = "test",
-            AsigneeId = 2,
+            AsigneeId = "2",
             Id = 1
         };
         dbContext.Tasks.Add(item);
@@ -104,7 +131,7 @@ public class JiraItemServiceTests
         {
             Title = "test",
             Description = "test",
-            AsigneeId = 2,
+            AsigneeId = "2",
             Id = 1
         };
         dbContext.Tasks.Add(item);
@@ -131,7 +158,7 @@ public class JiraItemServiceTests
         {
             Title = "test",
             Description = "test",
-            AsigneeId = 2,
+            AsigneeId = "2",
             Id = 1
         };
         var param = new UpdateAsigneeDto { TaskId = 1, AsigneeId = UserId };
@@ -150,7 +177,7 @@ public class JiraItemServiceTests
 
         var task = new Tasks {
             Id = 1,
-            AsigneeId = 1,
+            AsigneeId = "1",
             Description = "Test",
             Title = "test"
         };
@@ -160,10 +187,48 @@ public class JiraItemServiceTests
 
         var service = new JiraItemService(dbContext, userService.Object);
 
-        var param = new UpdateAsigneeDto { TaskId = 1, AsigneeId = 3 };
+        var param = new UpdateAsigneeDto { TaskId = 1, AsigneeId = "3" };
         Func<Task> act = async () => await service.UpdateAsigneeAsync(param);
 
         await Assert.ThrowsAsync<UserNotFound>(act);
+    }
+
+    [Fact]
+    public async Task DeleteAsync_WithNotFoundItem_ThrowsItemNotFound()
+    {
+        var userService = new Mock<ICurrentUserService>();
+        userService.Setup(x => x.UserId).Returns(UserId);
+
+        var dbContext = GetDbContext();
+        var service = new JiraItemService(dbContext, userService.Object);
+
+        int task = 1;
+        Func<Task> act = async () => await service.DeleteAsync(task);
+
+        await Assert.ThrowsAsync<ItemNotFound>(act);
+    }
+    [Fact]
+    public async Task DeleteAsync_WithDifferentOwner_ThrowsNotExactUser()
+    {
+        var userService = new Mock<ICurrentUserService>();
+        userService.Setup(x => x.UserId).Returns(UserId);
+
+        var dbContext = GetDbContext();
+        var item = new Tasks
+        {
+            Title = "test",
+            Description = "test",
+            AsigneeId = "2",
+            Id = 1
+        };
+        dbContext.Tasks.Add(item);
+        await dbContext.SaveChangesAsync();
+        dbContext.ChangeTracker.Clear();
+        
+        var service = new JiraItemService(dbContext, userService.Object);
+        Func<Task> act = async () => await service.DeleteAsync(item.Id);
+
+        await Assert.ThrowsAsync<NotExactUser>(act);
     }
 
     private JiraContext GetDbContext()

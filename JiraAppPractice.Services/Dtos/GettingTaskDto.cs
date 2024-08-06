@@ -8,5 +8,5 @@ public class GettingTaskDto
     public DateTime CreatedAt { get; set; }
     public int BoardId { get; set; }
     public int StatusId { get; set; }
-    public int AsigneeId { get; set; }
+    public string AsigneeId { get; set; }
 }

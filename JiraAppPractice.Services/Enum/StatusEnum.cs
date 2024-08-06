@@ -1,4 +1,4 @@
-﻿enum Statuses
+﻿enum Status
 {
     ToDo = 1,
     InProgress = 2,

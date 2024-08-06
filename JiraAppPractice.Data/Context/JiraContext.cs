@@ -1,16 +1,15 @@
 ﻿
 using JiraAppPractice.Data.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace JiraAppPractice.Data.Context;
 
-public class JiraContext : DbContext
+public class JiraContext : IdentityDbContext<User>
 {
     public DbSet<Boards> Boards { get; set; }
     public DbSet<Statuses> Statuses { get; set; }
     public DbSet<Tasks> Tasks { get; set; }
-    public DbSet<User> Users { get; set; }
-
     public JiraContext(DbContextOptions<JiraContext> options) : base(options)
     {
     }
@@ -34,9 +33,6 @@ public class JiraContext : DbContext
 
         modelBuilder.Entity<User>()
             .HasKey(t => t.Id);
-        modelBuilder.Entity<User>()
-            .Property(x => x.Name)
-            .HasMaxLength(50);
 
         modelBuilder.Entity<Tasks>()
             .Property(t => t.CreatedAt)
