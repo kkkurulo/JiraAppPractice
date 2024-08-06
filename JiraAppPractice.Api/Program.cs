@@ -8,6 +8,7 @@ using JiraAppPractice.Services.Interfaces;
 using JiraAppPractice.Services.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using ToDoApp.Api.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
