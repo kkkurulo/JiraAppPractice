@@ -12,6 +12,7 @@ public class JiraContext : IdentityDbContext<User>
     public DbSet<Tasks> Tasks { get; set; }
     public JiraContext(DbContextOptions<JiraContext> options) : base(options)
     {
+        
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
